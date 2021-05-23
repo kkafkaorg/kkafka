@@ -11,7 +11,6 @@ import org.apache.kafka.clients.consumer.OffsetCommitCallback
 import org.apache.kafka.common.TopicPartition
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.kkafka.commitSuspending
 
 internal class CommitKtTest {
     private val someMap = mapOf(TopicPartition("cake", 1) to OffsetAndMetadata(0, "lies"))
@@ -62,7 +61,7 @@ internal class CommitKtTest {
         val someMap2 = mapOf(TopicPartition("cakes", 10) to OffsetAndMetadata(0, "more lies")) + someMap
         runBlocking { consumer.commitSuspending(someMap2) }
 
-        verify(exactly = 1) { consumer.commitAsync(someMap2, any())  }
+        verify(exactly = 1) { consumer.commitAsync(someMap2, any()) }
     }
 
     @Test

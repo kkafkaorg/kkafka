@@ -1,8 +1,9 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 
 plugins {
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm")
     `java-library`
+    jacoco
 }
 
 repositories {
@@ -16,19 +17,5 @@ dependencies {
     testImplementation("io.mockk:mockk:1.11.0")
     api("org.apache.kafka:kafka_2.12:2.8.0")
 
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
-}
-
-
-kotlin {
-    explicitApi()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.allWarningsAsErrors = true
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
