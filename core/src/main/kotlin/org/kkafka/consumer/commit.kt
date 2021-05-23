@@ -13,7 +13,7 @@ import kotlin.coroutines.suspendCoroutine
  * - It throws rather than pass a nullable exception in the callback
  * - It returns the offsets passed to the callback
  */
-public suspend fun <K, V> KafkaConsumer<K, V>.commit(): Map<TopicPartition, OffsetAndMetadata> =
+public suspend fun <K, V> KafkaConsumer<K, V>.commitSuspending(): Map<TopicPartition, OffsetAndMetadata> =
     suspendCoroutine { continuation ->
         commitAsync { nullableOffsets: Map<TopicPartition, OffsetAndMetadata>?, exception: Exception? ->
             val offsets = nullableOffsets ?: emptyMap()
@@ -28,7 +28,7 @@ public suspend fun <K, V> KafkaConsumer<K, V>.commit(): Map<TopicPartition, Offs
  * - It throws rather than pass a nullable exception in the callback
  * - It returns the offsets passed to the callback
  */
-public suspend fun <K, V> KafkaConsumer<K, V>.commit(
+public suspend fun <K, V> KafkaConsumer<K, V>.commitSuspending(
     offsets: Map<TopicPartition, OffsetAndMetadata>,
 ): Map<TopicPartition, OffsetAndMetadata> = suspendCoroutine { continuation ->
     commitAsync(offsets) {
@@ -40,5 +40,3 @@ public suspend fun <K, V> KafkaConsumer<K, V>.commit(
         continuation.resumeWith(result)
     }
 }
-
-public fun hello(): Int = 2
