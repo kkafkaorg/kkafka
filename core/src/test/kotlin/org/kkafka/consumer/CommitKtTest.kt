@@ -11,7 +11,7 @@ import org.apache.kafka.clients.consumer.OffsetCommitCallback
 import org.apache.kafka.common.TopicPartition
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.kkafka.commit
+import org.kkafka.commitSuspending
 
 internal class CommitKtTest {
     private val someMap = mapOf(TopicPartition("cake", 1) to OffsetAndMetadata(0, "lies"))
@@ -29,14 +29,14 @@ internal class CommitKtTest {
 
     @Test
     fun `commit() calls commitAsync and continues`() {
-        runBlocking { consumer.commit() }
+        runBlocking { consumer.commitSuspending() }
 
         verify(exactly = 1) { consumer.commitAsync(any()) }
     }
 
     @Test
     fun `commit() returns what commitAsync returns`() {
-        val result = runBlocking { consumer.commit() }
+        val result = runBlocking { consumer.commitSuspending() }
 
         result shouldBe someMap
     }
@@ -51,7 +51,7 @@ internal class CommitKtTest {
         }
 
         val exception = assertThrows<IllegalStateException> {
-            runBlocking { consumer.commit() }
+            runBlocking { consumer.commitSuspending() }
         }
 
         exception.message shouldBe someException.message
@@ -60,7 +60,7 @@ internal class CommitKtTest {
     @Test
     fun `commit(offsets) calls commitAsync with passed params`() {
         val someMap2 = mapOf(TopicPartition("cakes", 10) to OffsetAndMetadata(0, "more lies")) + someMap
-        runBlocking { consumer.commit(someMap2) }
+        runBlocking { consumer.commitSuspending(someMap2) }
 
         verify(exactly = 1) { consumer.commitAsync(someMap2, any())  }
     }
@@ -75,7 +75,7 @@ internal class CommitKtTest {
         }
 
         val exception = assertThrows<IllegalStateException> {
-            runBlocking { consumer.commit(someMap) }
+            runBlocking { consumer.commitSuspending(someMap) }
         }
 
         exception.message shouldBe someException.message
