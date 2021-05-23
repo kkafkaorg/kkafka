@@ -11,7 +11,6 @@ import org.apache.kafka.clients.consumer.OffsetCommitCallback
 import org.apache.kafka.common.TopicPartition
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.kkafka.commit
 
 internal class CommitKtTest {
     private val someMap = mapOf(TopicPartition("cake", 1) to OffsetAndMetadata(0, "lies"))

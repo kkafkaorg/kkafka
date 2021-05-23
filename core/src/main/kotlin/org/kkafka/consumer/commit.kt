@@ -1,4 +1,4 @@
-package org.kkafka
+package org.kkafka.consumer
 
 import kotlin.Result.Companion.failure
 import kotlin.Result.Companion.success
@@ -41,3 +41,5 @@ public suspend fun <K, V> KafkaConsumer<K, V>.commit(
     }
 }
 
+
+public fun hello(): Int = 2
