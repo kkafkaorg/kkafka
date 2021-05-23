@@ -61,7 +61,7 @@ internal class CommitKtTest {
         val someMap2 = mapOf(TopicPartition("cakes", 10) to OffsetAndMetadata(0, "more lies")) + someMap
         runBlocking { consumer.commit(someMap2) }
 
-        verify(exactly = 1) { consumer.commitAsync(someMap2, any())  }
+        verify(exactly = 1) { consumer.commitAsync(someMap2, any()) }
     }
 
     @Test

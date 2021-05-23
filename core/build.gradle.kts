@@ -15,6 +15,5 @@ dependencies {
     testImplementation("io.mockk:mockk:1.11.0")
     api("org.apache.kafka:kafka_2.12:2.8.0")
 
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
 }

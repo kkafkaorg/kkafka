@@ -1,11 +1,11 @@
 package org.kkafka.consumer
 
-import kotlin.Result.Companion.failure
-import kotlin.Result.Companion.success
-import kotlin.coroutines.suspendCoroutine
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.common.TopicPartition
+import kotlin.Result.Companion.failure
+import kotlin.Result.Companion.success
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Like [KafkaConsumer.commitAsync], except
@@ -32,14 +32,13 @@ public suspend fun <K, V> KafkaConsumer<K, V>.commit(
     offsets: Map<TopicPartition, OffsetAndMetadata>,
 ): Map<TopicPartition, OffsetAndMetadata> = suspendCoroutine { continuation ->
     commitAsync(offsets) {
-            nullableOffsets: Map<TopicPartition, OffsetAndMetadata>?,
-            exception: Exception?,
+        nullableOffsets: Map<TopicPartition, OffsetAndMetadata>?,
+        exception: Exception?,
         ->
         val newOffsets = nullableOffsets ?: emptyMap()
         val result = if (exception != null) failure(exception) else success(newOffsets)
         continuation.resumeWith(result)
     }
 }
-
 
 public fun hello(): Int = 2
