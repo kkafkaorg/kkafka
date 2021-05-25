@@ -9,8 +9,8 @@ import kotlin.coroutines.suspendCoroutine
 
 public suspend fun <K, V> KafkaProducer<K, V>.sendSuspending(record: ProducerRecord<K, V>): RecordMetadata =
     suspendCoroutine { continuation ->
-        send(record) { metadata: RecordMetadata, exception: Exception? ->
-            val res = if (exception != null) failure(exception) else success(metadata)
+        send(record) { metadata: RecordMetadata?, exception: Exception? ->
+            val res = if (exception != null) failure(exception) else success(metadata!!)
             continuation.resumeWith(res)
         }
     }
