@@ -7,6 +7,10 @@ plugins {
     jacoco
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 allprojects {
     repositories {
         mavenCentral()
@@ -18,6 +22,9 @@ subprojects {
     apply<JacocoPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
+    jacoco {
+        toolVersion = "0.8.7"
+    }
     kotlin {
         explicitApi()
     }
