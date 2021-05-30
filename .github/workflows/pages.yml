@@ -14,12 +14,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: burrunan/gradle-cache-action@v1
-        name: Gradle Dokka render
+        name: Gradle Dokka and MkDocs render
         env:
           VARIABLE: VALUE
         with:
           job-id: jdk8
-          arguments: --no-daemon dokkaHtmlMultiModule
+          arguments: --no-daemon mkdocsBuild
           gradle-version: wrapper
       - uses: crazy-max/ghaction-github-pages@v2
         name: Github pages depoy
@@ -27,4 +27,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           target_branch: gh-pages
-          build_dir: build/dokka/htmlMultiModule
+          build_dir: docs/build/mkdocs

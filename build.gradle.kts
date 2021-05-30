@@ -44,10 +44,9 @@ subprojects {
         }
 
         withType<DokkaTaskPartial>().configureEach {
-
-            dokkaSourceSets {
+            if (project.name != "docs") dokkaSourceSets {
                 named("main") {
-                    moduleName.set("KKafka-${project.name}")
+                    moduleName.set("kkafka-${project.name}")
                     includes.from("Module.md")
                     sourceLink {
                         localDirectory.set(file("src/main/kotlin"))
