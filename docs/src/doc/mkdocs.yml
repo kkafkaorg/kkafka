@@ -40,13 +40,14 @@ markdown_extensions:
   - pymdownx.smartsymbols
   - pymdownx.superfences
 
-nav:
+#nav:
 #  - Home: index.md
-  - API Reference: "generated/index.html"
+#  - API Reference: "generated/index.html"
 
 
 extra_javascript:
   - expand_navigation.js
+  - api_reference_button.js
 
 extra_css:
   - colours.css

@@ -4,6 +4,7 @@ import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 plugins {
     id("ru.vyarus.mkdocs") version "2.1.1"
 }
+
 val generatedDocs = file("src/doc/docs/generated")
 
 tasks.clean {
