@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     button.className = "md-header__api-ref"
     let href = document.createElement("a")
     href.target= "_blank"
-    href.href = "generated/index.html"
+    href.href = "/generated/index.html"
     href.title = "Go to KDocs"
     href.className = "md-api-ref"
     href.appendChild(document.createTextNode("API Reference"))
