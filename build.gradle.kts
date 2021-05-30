@@ -40,6 +40,12 @@ subprojects {
     }
 }
 
+allprojects {
+    jacoco {
+        toolVersion = "0.8.7"
+    }
+}
+
 val rootCoverageReport by tasks.registering(JacocoReport::class) {
     executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
 
