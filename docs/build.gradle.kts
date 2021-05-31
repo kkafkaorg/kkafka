@@ -22,3 +22,8 @@ val copyFromDokka by tasks.registering(Copy::class) {
 tasks.withType<MkdocsTask> {
     dependsOn(copyFromDokka)
 }
+
+python {
+    modules.removeIf { "mkdocs-material" in it }
+    modules = modules + "mkdocs-material:7.1.6"
+}
