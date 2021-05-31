@@ -40,3 +40,13 @@ public suspend fun <K, V> KafkaConsumer<K, V>.commitSuspending(
         continuation.resumeWith(result)
     }
 }
+
+/**
+ * Overload of [commitSuspending] that can be used with
+ * [ConsumerRecord.partitionAndOffset]
+ * [org.apache.kafka.clients.consumer.ConsumerRecord.partitionAndOffset]
+ */
+public suspend fun <K, V> KafkaConsumer<K, V>.commitSuspending(
+    offset: Pair<TopicPartition, OffsetAndMetadata>,
+): Pair<TopicPartition, OffsetAndMetadata> =
+    commitSuspending(mapOf(offset)).entries.first().toPair()

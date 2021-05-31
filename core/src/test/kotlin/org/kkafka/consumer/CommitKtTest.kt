@@ -34,6 +34,15 @@ internal class CommitKtTest {
     }
 
     @Test
+    fun `cover overloads`() {
+        val record = record("t1", 1, 1L)
+        runBlocking { consumer.commitSuspending(record.partitionAndOffset) }
+
+        val map = mapOf(record.partitionAndOffset)
+        verify(exactly = 1) { consumer.commitAsync(map, any()) }
+    }
+
+    @Test
     fun `commit() returns what commitAsync returns`() {
         val result = runBlocking { consumer.commitSuspending() }
 
