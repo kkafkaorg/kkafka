@@ -15,12 +15,12 @@ import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.utils.Time
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalStateException
 
 internal class SendKtTest {
-    private val someRecord = ProducerRecord<String, String>("topic", 1, "hello", "world")
+    private val someRecord = ProducerRecord("topic", 1, "hello", "world")
     private val someRecordMetadata = RecordMetadata(TopicPartition("topic", 1), 0, 0, 0, 0, 1, 1)
-    private val someFutureRecordMetadata = FutureRecordMetadata(ProduceRequestResult(TopicPartition("topic", 1)), 0, 0, 0, 0, 1, Time.SYSTEM)
+    private val someFutureRecordMetadata =
+        FutureRecordMetadata(ProduceRequestResult(TopicPartition("topic", 1)), 0, 0, 0, 0, 1, Time.SYSTEM)
 
     private val producer: KafkaProducer<String, String> = mockk {
         every { send(any(), any()) } answers {
@@ -65,7 +65,7 @@ internal class SendKtTest {
 
     @Test
     fun `sendSuspending(record) calls send with passed params`() {
-        val someRecord2 = ProducerRecord<String, String>("topic2", 2, "hello2", "world2")
+        val someRecord2 = ProducerRecord("topic2", 2, "hello2", "world2")
         runBlocking { producer.sendSuspending(someRecord2) }
 
         verify(exactly = 1) { producer.send(someRecord2, any()) }

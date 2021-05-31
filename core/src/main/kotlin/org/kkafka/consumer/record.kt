@@ -23,3 +23,7 @@ public val ConsumerRecords<*, *>.partitionAndLatestOffsets: Map<TopicPartition, 
         }
         OffsetAndMetadata(last.offset())
     }
+
+public operator fun <K> ConsumerRecord<K, *>.component1(): K = key()
+
+public operator fun <V> ConsumerRecord<*, V>.component2(): V = value()

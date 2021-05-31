@@ -1,2 +1,2 @@
 rootProject.name = "kkafka"
-include("core")
+include("core", "docs")

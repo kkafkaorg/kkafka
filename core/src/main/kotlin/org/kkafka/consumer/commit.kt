@@ -23,7 +23,7 @@ public suspend fun <K, V> KafkaConsumer<K, V>.commitSuspending(): Map<TopicParti
     }
 
 /**
- * Like [KafkaConsumer.commitAsync(offsets)], except
+ * Like [KafkaConsumer.commitAsync] (offsets), except
  * - It suspends rather than take a callback
  * - It throws rather than pass a nullable exception in the callback
  * - It returns the offsets passed to the callback
