@@ -1,6 +1,9 @@
 package org.kkafka.consumer
 
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.common.TopicPartition
@@ -38,6 +41,24 @@ internal class RecordKtTest {
         map[tp1]?.offset() shouldBe 2
         map[tp2]?.offset() shouldBe 21
         map[tp3]?.offset() shouldBe 109
+    }
+
+    @Test
+    fun `component1 and 2 return key and value`() {
+        val r: ConsumerRecord<String, String> = mockk {
+            every { key() } returns "k"
+            every { value() } returns "v"
+        }
+
+        val (key, _) = r
+
+        verify(exactly = 1) { r.key() }
+        key shouldBe "k"
+
+        val (_, value) = r
+
+        verify(exactly = 1) { r.value() }
+        value shouldBe "v"
     }
 }
 
