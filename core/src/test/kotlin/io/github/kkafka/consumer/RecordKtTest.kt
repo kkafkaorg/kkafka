@@ -1,4 +1,4 @@
-package org.kkafka.consumer
+package io.github.kkafka.consumer
 
 import io.kotest.matchers.shouldBe
 import io.mockk.every

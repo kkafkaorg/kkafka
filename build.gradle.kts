@@ -67,12 +67,7 @@ subprojects {
 }
 
 allprojects {
-    jacoco {
-        toolVersion = "0.8.7"
-    }
-}
-
-allprojects {
+    group = "io.github.kkafkaorg"
     jacoco {
         toolVersion = "0.8.7"
     }

@@ -1,4 +1,4 @@
-package org.kkafka.producer
+package io.github.kkafka.producer
 
 import io.kotest.matchers.shouldBe
 import io.mockk.every
