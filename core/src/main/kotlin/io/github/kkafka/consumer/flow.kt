@@ -1,4 +1,4 @@
-package org.kkafka.consumer
+package io.github.kkafka.consumer
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

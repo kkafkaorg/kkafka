@@ -1,4 +1,4 @@
-package org.kkafka.consumer
+package io.github.kkafka.consumer
 
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
