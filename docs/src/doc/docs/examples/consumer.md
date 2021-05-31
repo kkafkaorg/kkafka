@@ -35,9 +35,12 @@ val flow = consumer.pollWithFlattenedFlow()
 ```
 
 Note how:
+
 - We use higher order functions like `filter()`, rather than stateful loops
+
 - We are able to call other suspending functions while processing our records
-- The flow is cold: we will only poll for the next record once we are
-done with the current one
+
+- The flow is cold: we will only poll for the next record once we are done with the current one
+  
 - We can cleanly stop the polling at any time by setting `active = false`.
 

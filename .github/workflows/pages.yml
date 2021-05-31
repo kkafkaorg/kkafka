@@ -2,7 +2,7 @@ name: Check
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, nico.dokka ]
 
   workflow_dispatch:
 
