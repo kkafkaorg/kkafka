@@ -9,5 +9,5 @@ public object Producers {
     )
 }
 
-public fun <K, V> KafkaProducer(vararg props: Pair<String, String>): KafkaProducer<K, V>
-   = KafkaProducer<K, V>(props.toList().toMap())
+public fun <K, V> KafkaProducer(vararg props: Pair<String, String>): KafkaProducer<K, V> =
+    KafkaProducer<K, V>(props.toList().toMap())
