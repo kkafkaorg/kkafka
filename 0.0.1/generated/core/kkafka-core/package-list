@@ -1,0 +1,17 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.github.kkafka.consumer////PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/index.html
+$dokka.location:io.github.kkafka.consumer//commitSuspending/org.apache.kafka.clients.consumer.KafkaConsumer[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/commit-suspending.html
+$dokka.location:io.github.kkafka.consumer//commitSuspending/org.apache.kafka.clients.consumer.KafkaConsumer[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#kotlin.Pair[org.apache.kafka.common.TopicPartition,org.apache.kafka.clients.consumer.OffsetAndMetadata]/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/commit-suspending.html
+$dokka.location:io.github.kkafka.consumer//commitSuspending/org.apache.kafka.clients.consumer.KafkaConsumer[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#kotlin.collections.Map[org.apache.kafka.common.TopicPartition,org.apache.kafka.clients.consumer.OffsetAndMetadata]/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/commit-suspending.html
+$dokka.location:io.github.kkafka.consumer//component1/org.apache.kafka.clients.consumer.ConsumerRecord[TypeParam(bounds=[kotlin.Any?]),*]#/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/component1.html
+$dokka.location:io.github.kkafka.consumer//component2/org.apache.kafka.clients.consumer.ConsumerRecord[*,TypeParam(bounds=[kotlin.Any?])]#/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/component2.html
+$dokka.location:io.github.kkafka.consumer//partitionAndLatestOffsets/org.apache.kafka.clients.consumer.ConsumerRecords[*,*]#/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/partition-and-latest-offsets.html
+$dokka.location:io.github.kkafka.consumer//partitionAndOffset/org.apache.kafka.clients.consumer.ConsumerRecord[*,*]#/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/partition-and-offset.html
+$dokka.location:io.github.kkafka.consumer//pollWithFlattenedFlow/org.apache.kafka.clients.consumer.KafkaConsumer[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#java.time.Duration/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/poll-with-flattened-flow.html
+$dokka.location:io.github.kkafka.consumer//pollWithFlow/org.apache.kafka.clients.consumer.KafkaConsumer[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#java.time.Duration/PointingToDeclaration/kkafka-core/io.github.kkafka.consumer/poll-with-flow.html
+$dokka.location:io.github.kkafka.producer////PointingToDeclaration/kkafka-core/io.github.kkafka.producer/index.html
+$dokka.location:io.github.kkafka.producer//sendSuspending/org.apache.kafka.clients.producer.KafkaProducer[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#org.apache.kafka.clients.producer.ProducerRecord[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kkafka-core/io.github.kkafka.producer/send-suspending.html
+io.github.kkafka.consumer
+io.github.kkafka.producer
+
