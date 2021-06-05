@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
+    api(project(":core"))
     val serializationLibVersion: String by project
     api("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$serializationLibVersion")
 }
