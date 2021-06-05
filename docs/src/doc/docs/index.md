@@ -33,7 +33,8 @@ val props = Properties().apply {
 val consumer = KafkaConsumer<String, String>(props)
 consumer.subscribe(listOf("foo", "bar"))
 consumer.pollWithFlow
-    .collect { batch ->
-        insertIntoDb(batch.toList())
+    .collect { record ->
+        val (key, value) = record
+        updateDb(key, value)
     }
 ```

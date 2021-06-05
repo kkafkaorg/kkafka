@@ -21,7 +21,7 @@ import java.time.Duration
  * returns.
  *
  * If you do not use auto-commit and would like a flow that emits one [ConsumerRecord]
- * at a time, see [pollWithFlattenedFlow].
+ * at a time, see [pollWithFlow].
  *
  * **For example, with auto-commit:**
  *
@@ -45,7 +45,7 @@ import java.time.Duration
  *   }
  * ```
  */
-public fun <K, V> KafkaConsumer<K, V>.pollWithFlow(pollingPeriod: Duration): Flow<ConsumerRecords<K, V>> =
+public fun <K, V> KafkaConsumer<K, V>.pollWithFlowByBatches(pollingPeriod: Duration): Flow<ConsumerRecords<K, V>> =
     flow {
         while (true) emit(poll(pollingPeriod))
     }
@@ -53,7 +53,7 @@ public fun <K, V> KafkaConsumer<K, V>.pollWithFlow(pollingPeriod: Duration): Flo
 /**
  * Runs a polling loop returned as a cold [Flow] of [ConsumerRecord]s
  *
- * **Consider using [pollWithFlow] instead if you are using auto-commit**. When consuming
+ * When consuming
  * this flattened flow with auto-commit on, there is a scenario where if you crash while
  * collecting this flow it is possible some records you have not handled can get committed
  * (this is not a concern at all if you are not using auto-commit).
@@ -69,8 +69,11 @@ public fun <K, V> KafkaConsumer<K, V>.pollWithFlow(pollingPeriod: Duration): Flo
  *      consumer.commitSuspending(it.partitionAndOffset)
  *   }
  * ```
+ *
+ * For a [Flow] that returns [ConsumerRecords] in batches, more closely resembling [KafkaConsumer.poll], see
+ * [pollWithFlowByBatches]
  */
-public fun <K, V> KafkaConsumer<K, V>.pollWithFlattenedFlow(pollingPeriod: Duration): Flow<ConsumerRecord<K, V>> =
+public fun <K, V> KafkaConsumer<K, V>.pollWithFlow(pollingPeriod: Duration): Flow<ConsumerRecord<K, V>> =
     flow {
-        pollWithFlow(pollingPeriod).collect { records -> for (record in records) emit(record) }
+        pollWithFlowByBatches(pollingPeriod).collect { records -> for (record in records) emit(record) }
     }
