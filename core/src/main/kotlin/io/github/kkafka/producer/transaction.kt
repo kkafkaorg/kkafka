@@ -3,6 +3,7 @@ package io.github.kkafka.producer
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.common.errors.TransactionAbortedException
 
 /**
  * Produce transactionally with a given consumer on the given topics.
@@ -12,21 +13,21 @@ import org.apache.kafka.clients.producer.KafkaProducer
  * The [consumer] must be subscribed to and consuming from the given [consumerTopics].
  *
  * [block] is the transaction code. Here you can consume from [consumer] and send with the producer.
- * At the end of the [block], if true is returned, then the transaction is committed, otherwise if false is returned,
- * it is aborted.
+ * At the end of the [block], if no exceptions were thrown, the transaction is committed and the result of the
+ * block is returned. Otherwise, the transaction is aborted and the exception is thrown.
  *
  * This is useful for a consume-process-produce pattern, where we commit to the consumer only if we have successfully
  * produced. This ensures exactly once processing.
  */
-public fun <K, V> KafkaProducer<K, V>.transaction(
+public fun <K, V, T> KafkaProducer<K, V>.transaction(
     consumer: KafkaConsumer<*, *>,
-    consumerTopics: List<String>,
-    block: KafkaProducer<K, V>.() -> Boolean,
-) {
+    consumerTopics: Set<String>,
+    block: KafkaProducer<K, V>.() -> T,
+): T {
     beginTransaction()
+    return try {
+        val res = block(this)
 
-    // Run the transaction's block of code
-    if (block(this)) {
         // Get the TopicPartition objects given the topic names
         val consumerTopicPartitions = consumer.assignment().filter { it.topic() in consumerTopics }.map { it!! }
 
@@ -35,14 +36,24 @@ public fun <K, V> KafkaProducer<K, V>.transaction(
 
         val groupId = consumer.groupMetadata().groupId()
 
+        // Make sure that we got all the needed partitions
+        if (offsets.size != consumerTopics.size) {
+            throw TransactionAbortedException(
+                "consumer in transaction is not properly subscribed to all topics given for transaction"
+            )
+        }
+
         // Commit the consumer's offsets
         sendOffsetsToTransaction(offsets, groupId)
 
         // Successful transaction
         commitTransaction()
-    } else {
+
+        res
+    } catch (e: Exception) {
         // If the transaction failed, abort
         abortTransaction()
+        throw e
     }
 }
 
@@ -50,28 +61,29 @@ public fun <K, V> KafkaProducer<K, V>.transaction(
  * Consume and produce transactionally on a single topic.
  * See [transaction].
  */
-public fun <K, V> KafkaProducer<K, V>.transaction(
+public fun <K, V, T> KafkaProducer<K, V>.transaction(
     consumer: KafkaConsumer<*, *>,
     consumerTopic: String,
-    block: KafkaProducer<K, V>.() -> Boolean,
-) {
-    transaction(consumer, listOf(consumerTopic), block)
+    block: KafkaProducer<K, V>.() -> T,
+): T {
+    return try {
+        transaction(consumer, setOf(consumerTopic), block)
+    } catch (e: Exception) {
+        throw e
+    }
 }
 
 /**
  * Produce transactionally with an arbitrary block of code.
- * If an exception occurs during execution of [block], the transaction is aborted, otherwise it is committed.
+ * If an exception occurs during execution of [block], the transaction is aborted, otherwise it is committed
+ * and the result of [block] is returned.
  */
-public fun <K, V, T> KafkaProducer<K, V>.transaction(block: KafkaProducer<K, V>.() -> T) : T {
+public fun <K, V, T> KafkaProducer<K, V>.transaction(block: KafkaProducer<K, V>.() -> T): T {
     beginTransaction()
     return try {
         val res = block(this)
-        try {
-            commitTransaction()
-            res
-        } catch (onCommit: Exception) {
-            throw onCommit
-        }
+        commitTransaction()
+        res
     } catch (e: Exception) {
         abortTransaction()
         throw e
