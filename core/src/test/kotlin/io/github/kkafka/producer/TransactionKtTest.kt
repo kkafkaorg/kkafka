@@ -1,8 +1,6 @@
 package io.github.kkafka.producer
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -26,10 +24,10 @@ internal class TransactionKtTest {
     }
 
     private val producer: KafkaProducer<String, String> = mockk {
-        every { beginTransaction() } answers {}
-        every { commitTransaction() } answers {}
-        every { abortTransaction() } answers {}
-        every { sendOffsetsToTransaction(any(), "someGroupId") } answers {}
+        every { beginTransaction() } just runs
+        every { commitTransaction() } just runs
+        every { abortTransaction() } just runs
+        every { sendOffsetsToTransaction(any(), "someGroupId") } just runs
     }
 
     //
