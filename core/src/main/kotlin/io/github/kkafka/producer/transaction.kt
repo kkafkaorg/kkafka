@@ -4,7 +4,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.common.KafkaException
-import org.apache.kafka.common.errors.*
+import org.apache.kafka.common.errors.AuthorizationException
+import org.apache.kafka.common.errors.OutOfOrderSequenceException
+import org.apache.kafka.common.errors.ProducerFencedException
+import org.apache.kafka.common.errors.TransactionAbortedException
+import org.apache.kafka.common.errors.UnsupportedVersionException
 
 /**
  * Produce transactionally with a given consumer on the given topics.
@@ -93,7 +97,8 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(block: KafkaProducer<K, V>.
  */
 private fun <K, V> KafkaProducer<K, V>.handleTransactionException(e: Exception): KafkaException {
     return when (e) {
-        is ProducerFencedException, is OutOfOrderSequenceException, is AuthorizationException, is UnsupportedVersionException -> {
+        is ProducerFencedException, is OutOfOrderSequenceException,
+        is AuthorizationException, is UnsupportedVersionException -> {
             close()
             ProducerClosedException("A fatal exception occurred during transaction and the producer had to be closed.")
         }
