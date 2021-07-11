@@ -65,7 +65,7 @@ subprojects {
                         url = URL("https://javadoc.io/doc/org.apache.kafka/kafka-clients/2.8.0/")
                     )
                     externalDocumentationLink(
-                        url = URL("https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/")
+                        url = URL("https://kotlin.github.io/kotlinx.coroutines/")
                     )
                 }
             }

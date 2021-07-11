@@ -25,5 +25,5 @@ tasks.withType<MkdocsTask> {
 
 python {
     modules.removeIf { "mkdocs-material" in it }
-    modules = modules + "mkdocs-material:7.1.6"
+    modules.add("mkdocs-material:7.1.6")
 }
