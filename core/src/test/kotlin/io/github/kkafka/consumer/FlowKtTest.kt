@@ -15,27 +15,10 @@ import org.junit.jupiter.api.assertThrows
 import java.time.Duration
 
 internal class FlowKtTest {
-    private fun consumer(returns: Sequence<ConsumerRecords<String, String>>): KafkaConsumer<String, String> =
-        mockk {
-            val iter = returns.iterator()
-            every { poll(any<Duration>()) } answers { iter.next() }
-        }
-
-    fun recordBatch(
-        topic: String = "21",
-        partition: Int = 1,
-        batchSize: Int = 5,
-        batches: Int = 10,
-    ) = List(batchSize * batches) { record(topic, partition, offset = it.toLong()) }
-        .windowed(batchSize, step = batchSize, partialWindows = true)
-        .map { list ->
-            ConsumerRecords(list.groupBy { it.partitionAndOffset.first })
-        }
-
     @Test
     fun `collected flow is equal to what poll returns`() = runBlocking {
         val batch = recordBatch(batchSize = 11, batches = 10)
-        val collected = consumer(batch.asSequence()).pollWithFlow(Duration.ZERO).take(10).toList()
+        val collected = consumer(batch.asSequence()).pollWithFlowByBatches(Duration.ZERO).take(10).toList()
 
         collected shouldBe batch
     }
@@ -46,7 +29,7 @@ internal class FlowKtTest {
         val flattened = batch.flatMap { it.toList() }
 
         val collected =
-            consumer(batch.asSequence()).pollWithFlattenedFlow(Duration.ZERO).take(10 * 11).toList()
+            consumer(batch.asSequence()).pollWithFlow(Duration.ZERO).take(10 * 11).toList()
 
         collected shouldBe flattened
     }
@@ -62,7 +45,7 @@ internal class FlowKtTest {
         val collected = mutableListOf<ConsumerRecords<*, *>>()
 
         runBlocking {
-            val first10 = c.pollWithFlow(Duration.ZERO)
+            val first10 = c.pollWithFlowByBatches(Duration.ZERO)
                 .onEach { collected += it }
                 .take(10)
 
@@ -73,3 +56,19 @@ internal class FlowKtTest {
         collected shouldBe batches
     }
 }
+private fun recordBatch(
+    topic: String = "21",
+    partition: Int = 1,
+    batchSize: Int = 5,
+    batches: Int = 10,
+) = List(batchSize * batches) { record(topic, partition, offset = it.toLong()) }
+    .windowed(batchSize, step = batchSize, partialWindows = true)
+    .map { list ->
+        ConsumerRecords(list.groupBy { it.partitionAndOffset.first })
+    }
+
+private fun consumer(returns: Sequence<ConsumerRecords<String, String>>): KafkaConsumer<String, String> =
+    mockk {
+        val iter = returns.iterator()
+        every { poll(any<Duration>()) } answers { iter.next() }
+    }

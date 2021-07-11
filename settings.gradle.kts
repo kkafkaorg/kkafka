@@ -1,2 +1,2 @@
 rootProject.name = "kkafka"
-include("core", "docs")
+include("core", "docs", "serialization-protobuf")

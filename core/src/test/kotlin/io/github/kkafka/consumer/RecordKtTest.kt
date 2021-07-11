@@ -62,7 +62,7 @@ internal class RecordKtTest {
     }
 }
 
-fun record(
+internal fun record(
     topic: String,
     partition: Int,
     offset: Long,
