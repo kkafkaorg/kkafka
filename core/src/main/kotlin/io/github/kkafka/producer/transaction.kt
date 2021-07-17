@@ -3,12 +3,7 @@ package io.github.kkafka.producer
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.common.KafkaException
-import org.apache.kafka.common.errors.AuthorizationException
-import org.apache.kafka.common.errors.OutOfOrderSequenceException
-import org.apache.kafka.common.errors.ProducerFencedException
 import org.apache.kafka.common.errors.TransactionAbortedException
-import org.apache.kafka.common.errors.UnsupportedVersionException
 
 /**
  * Produce transactionally with a given consumer on the given topics.
@@ -56,7 +51,13 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(
 
         res
     } catch (e: Exception) {
-        throw handleTransactionException(e)
+        try {
+            abortTransaction()
+        } catch (eAbort: Exception) {
+            throw eAbort
+        }
+
+        throw e
     }
 }
 
@@ -75,9 +76,7 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(
  * If an exception occurs during the execution of [block] or the transaction commit, the transaction is aborted,
  * otherwise it is committed and the result of [block] is returned.
  *
- * If any of [ProducerFencedException], [OutOfOrderSequenceException], [UnsupportedVersionException] or
- * [AuthorizationException] is thrown, the producer is in an invalid state and is automatically closed.
- * For any other exception, the transaction is aborted and may be tried again.
+ * Rethrows any exceptions thrown by [block] [KafkaProducer.commitTransaction], or [KafkaProducer.abortTransaction]
  */
 public fun <K, V, T> KafkaProducer<K, V>.transaction(block: KafkaProducer<K, V>.() -> T): T {
     beginTransaction()
@@ -86,25 +85,11 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(block: KafkaProducer<K, V>.
         commitTransaction()
         res
     } catch (e: Exception) {
-        throw handleTransactionException(e)
-    }
-}
-
-/*
- * If any of [ProducerFencedException], [OutOfOrderSequenceException], [UnsupportedVersionException] or
- * [AuthorizationException] is thrown, the producer is in an invalid state and is automatically closed.
- * For any other exception, the transaction is aborted and may be tried again.
- */
-private fun <K, V> KafkaProducer<K, V>.handleTransactionException(e: Exception): KafkaException {
-    return when (e) {
-        is ProducerFencedException, is OutOfOrderSequenceException,
-        is AuthorizationException, is UnsupportedVersionException -> {
-            close()
-            ProducerClosedException("A fatal exception occurred during transaction and the producer had to be closed.")
-        }
-        else -> {
+        try {
             abortTransaction()
-            TransactionAbortedException("An exception occurred during transaction. The transaction may be tried again.")
+        } catch (eAbort: Exception) {
+            throw eAbort
         }
+        throw e
     }
 }

@@ -1,6 +1,11 @@
 package io.github.kkafka.producer
 
-import io.mockk.*
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -50,7 +55,7 @@ internal class TransactionKtTest {
         }
         verify(exactly = 1) { producer.commitTransaction() }
         verify(exactly = 0) { producer.abortTransaction() }
-        assert(res == "someResult")
+        res shouldBe "someResult"
     }
 
     @Test
@@ -184,6 +189,6 @@ internal class TransactionKtTest {
         verify(exactly = 1) { producer.commitTransaction() }
         verify(exactly = 0) { producer.abortTransaction() }
 
-        assert(res == "hello")
+        res shouldBe "hello"
     }
 }
