@@ -54,6 +54,7 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(
         try {
             abortTransaction()
         } catch (eAbort: Exception) {
+            eAbort.addSuppressed(e)
             throw eAbort
         }
 
@@ -62,14 +63,13 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(
 }
 
 /**
- * Consume and produce transactionally on a single topic.
- * See [transaction].
+ * Overload of [transaction] with vararg.
  */
 public fun <K, V, T> KafkaProducer<K, V>.transaction(
     consumer: KafkaConsumer<*, *>,
-    consumerTopic: String,
+    vararg consumerTopics: String,
     block: KafkaProducer<K, V>.() -> T,
-): T = transaction(consumer, setOf(consumerTopic), block)
+): T = transaction(consumer, consumerTopics.toSet(), block)
 
 /**
  * Produce transactionally with an arbitrary block of code.
@@ -88,6 +88,7 @@ public fun <K, V, T> KafkaProducer<K, V>.transaction(block: KafkaProducer<K, V>.
         try {
             abortTransaction()
         } catch (eAbort: Exception) {
+            eAbort.addSuppressed(e)
             throw eAbort
         }
         throw e
