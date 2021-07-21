@@ -85,6 +85,21 @@ internal class TransactionKtTest {
         verify(exactly = 1) { producer.abortTransaction() }
     }
 
+    @Test
+    fun `transaction with consumer throws if abort throws`() {
+        every { producer.abortTransaction() } throws (Exception())
+        assertThrows<Exception> {
+            producer.transaction(consumer, topics) {
+                // Block fails
+                throw Exception()
+            }
+        }
+
+        verify(exactly = 1) { producer.beginTransaction() }
+        verify(exactly = 0) { producer.commitTransaction() }
+        verify(exactly = 1) { producer.abortTransaction() }
+    }
+
     //
     // Tests for transaction with consumer and single topic
     //
@@ -135,6 +150,21 @@ internal class TransactionKtTest {
         verify(exactly = 1) { producer.abortTransaction() }
     }
 
+    @Test
+    fun `transaction with single topic throws if abort throws`() {
+        every { producer.abortTransaction() } throws (Exception())
+        assertThrows<Exception> {
+            producer.transaction(consumer, topic) {
+                // Block fails
+                throw Exception()
+            }
+        }
+
+        verify(exactly = 1) { producer.beginTransaction() }
+        verify(exactly = 0) { producer.commitTransaction() }
+        verify(exactly = 1) { producer.abortTransaction() }
+    }
+
     //
     // Tests for transaction with no consumer
     //
@@ -152,6 +182,21 @@ internal class TransactionKtTest {
 
     @Test
     fun `no consumer transaction aborts and throws if block threw`() {
+        assertThrows<Exception> {
+            producer.transaction {
+                // Execution fails
+                throw Exception()
+            }
+        }
+
+        verify(exactly = 1) { producer.beginTransaction() }
+        verify(exactly = 0) { producer.commitTransaction() }
+        verify(exactly = 1) { producer.abortTransaction() }
+    }
+
+    @Test
+    fun `no consumer transaction throws if abort threw`() {
+        every { producer.abortTransaction() } throws (Exception())
         assertThrows<Exception> {
             producer.transaction {
                 // Execution fails
