@@ -89,7 +89,7 @@ subprojects {
 val rootCoverageReport by tasks.registering(JacocoReport::class) {
     executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
 
-    subprojects.filter { "docs" !in it.name }.forEach { it.sourceSets { it.sourceSets.main.get() } }
+    subprojects.filter { "docs" !in it.name }.forEach { sourceSets(it.sourceSets.main.get()) }
 
     reports {
         xml.isEnabled = true
