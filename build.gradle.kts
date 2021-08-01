@@ -64,6 +64,7 @@ subprojects {
         }
     }
 
+    val kafkaVersion: String by project
     tasks.withType<DokkaTaskPartial>().configureEach {
         if (project.name != "docs") dokkaSourceSets {
             named("main") {
@@ -76,7 +77,7 @@ subprojects {
                     ))
                 }
                 externalDocumentationLink(
-                    url = URL("https://javadoc.io/doc/org.apache.kafka/kafka-clients/2.8.0/")
+                    url = URL("https://javadoc.io/doc/org.apache.kafka/kafka-clients/$kafkaVersion/")
                 )
                 externalDocumentationLink(
                     url = URL("https://kotlin.github.io/kotlinx.coroutines/")
