@@ -7,8 +7,9 @@ plugins {
 
 val generatedDocs = file("src/doc/docs/generated")
 
-tasks.clean {
+val clean by tasks.registering {
     delete(generatedDocs)
+    delete(buildDir)
 }
 
 val copyFromDokka by tasks.registering(Copy::class) {
@@ -25,5 +26,5 @@ tasks.withType<MkdocsTask> {
 
 python {
     modules.removeIf { "mkdocs-material" in it }
-    modules = modules + "mkdocs-material:7.1.6"
+    modules.add("mkdocs-material:7.1.6")
 }

@@ -16,12 +16,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: burrunan/gradle-cache-action@v1
-        name: Gradle check
+        name: Gradle check and docs render
         env:
           VARIABLE: VALUE
         with:
-          job-id: jdk8
-          arguments: --no-daemon build
+          job-id: jdk11
+          arguments: --no-daemon build mkdocsBuild
           gradle-version: wrapper
 
       - uses: codecov/codecov-action@v1
