@@ -8,3 +8,5 @@ In particular, KKafka offers implementations for
 [Kafka's Serializer][org.apache.kafka.common.serialization.Serializer]
 and
 [Kafka's Deserializer][org.apache.kafka.common.serialization.Serializer].
+ You can either use those, or extensions functions that (de)serialize
+directly when sending or polling.

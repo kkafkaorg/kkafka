@@ -7,8 +7,9 @@ plugins {
 
 val generatedDocs = file("src/doc/docs/generated")
 
-tasks.clean {
+val clean by tasks.registering {
     delete(generatedDocs)
+    delete(buildDir)
 }
 
 val copyFromDokka by tasks.registering(Copy::class) {

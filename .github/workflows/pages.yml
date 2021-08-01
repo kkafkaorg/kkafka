@@ -18,7 +18,7 @@ jobs:
         env:
           VARIABLE: VALUE
         with:
-          job-id: jdk8
+          job-id: jdk11
           arguments: --no-daemon mkdocsBuild
           gradle-version: wrapper
       - uses: crazy-max/ghaction-github-pages@v2

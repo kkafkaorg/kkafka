@@ -20,7 +20,7 @@ jobs:
         env:
           VARIABLE: VALUE
         with:
-          job-id: jdk8
+          job-id: jdk11
           arguments: --no-daemon build mkdocsBuild
           gradle-version: wrapper
 
